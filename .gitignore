@@ -1,14 +1,17 @@
+# gradle template
 .gradle
-/build/
+build/
+!gradle/wrapper/gradle-wrapper.jar
 
-# Ignore Gradle GUI config
-gradle-app.setting
+# ignore all .class files
+*.class
 
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
+# exclude lib.class from "*.class", meaning all lib.class are still tracked
+!lib.class
 
-# Cache of project
-.gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
+# ignore files about intellij
+.idea
+*.iws
+*.iml
+*.ipr
+/out
