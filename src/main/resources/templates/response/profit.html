@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Detail Stock Profit</title>
 </head>
 <body>
-$END$
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>수익률 (%)</th>
+            <th>주가 차이</th>
+            <th>구매일</th>
+            <th>판매일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${maxProfit}"></tr>
+            <td th:text="${maxProfit.getPurchaseDate()}">Purchase date</td>
+            <td th:text="${maxProfit.getSellDate()}">Sell date</td>
+            <td th:text="${maxProfit.getProfit()}">Price variance</td>
+            <td th:text="${maxProfit.getPercentage()}">Profit (percentage)</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
