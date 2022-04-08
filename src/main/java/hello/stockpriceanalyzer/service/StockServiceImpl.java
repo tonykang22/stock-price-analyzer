@@ -63,7 +63,7 @@ public class StockServiceImpl implements StockService {
         return maxProfit;
     }
 
-    private MaxProfitDto converToMaxProfit(long purchaseDate, long sellDate, double profit, double min) {
+    private MaxProfitDto convertToMaxProfit(long purchaseDate, long sellDate, double profit, double min) {
         String convertedPurchaseDate = convertUnixTime(purchaseDate);
         String convertedSellDate = convertUnixTime(sellDate);
         double convertedProfit = Double.parseDouble(String.format("%.2f", profit));
