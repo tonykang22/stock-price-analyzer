@@ -1,5 +1,11 @@
-package hello.stockpriceanalyzer;
+package hello.stockpriceanalyzer.service;
 
+import hello.stockpriceanalyzer.dto.MaxProfitDto;
+import hello.stockpriceanalyzer.dto.StockDto;
+import hello.stockpriceanalyzer.repository.MemoryStockRepository;
+import hello.stockpriceanalyzer.repository.StockRepository;
+import hello.stockpriceanalyzer.service.thirdparty.StockSourceAPI;
+import hello.stockpriceanalyzer.service.thirdparty.YahooFinance;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -12,8 +18,8 @@ public class StockServiceImpl implements StockService {
     private StockSourceAPI sourceAPI = new YahooFinance();
 
     @Override
-    public MaxProfit calculateProfit(String symbol) throws IOException, ParseException {
-        Stock findStock = findByStockSymbol(symbol);
+    public MaxProfitDto calculateProfit(String symbol) throws IOException, ParseException {
+        StockDto findStock = findByStockSymbol(symbol);
         Map<Long, Double> stockInfo = findStock.getStockInfo();
 
         List<Long> dates = new ArrayList<>(stockInfo.keySet());
@@ -40,17 +46,17 @@ public class StockServiceImpl implements StockService {
             min = prices.get(i);
         }
 
-        MaxProfit maxProfit = converToMaxProfit(purchaseDate, sellDate, profit, min);
+        MaxProfitDto maxProfit = converToMaxProfit(purchaseDate, sellDate, profit, min);
 
         return maxProfit;
     }
 
-    private MaxProfit converToMaxProfit(long purchaseDate, long sellDate, double profit, double min) {
+    private MaxProfitDto converToMaxProfit(long purchaseDate, long sellDate, double profit, double min) {
         String convertedPurchaseDate = convertUnixTime(purchaseDate);
         String convertedSellDate = convertUnixTime(sellDate);
         double convertedProfit = Double.parseDouble(String.format("%.2f", profit));
         double convertedPercentage = Double.parseDouble(String.format("%.2f", (profit / min) * 100));
-        return new MaxProfit(convertedPurchaseDate, convertedSellDate, convertedProfit, convertedPercentage);
+        return new MaxProfitDto(convertedPurchaseDate, convertedSellDate, convertedProfit, convertedPercentage);
     }
 
     private String convertUnixTime(long timestamp) {
@@ -61,20 +67,20 @@ public class StockServiceImpl implements StockService {
         return sdf.format(date);
     }
 
-    private Stock findByStockSymbol(String symbol) throws IOException, ParseException {
-        Optional<Stock> optional = stockRepository.findByStockSymbol(symbol);
+    private StockDto findByStockSymbol(String symbol) throws IOException, ParseException {
+        Optional<StockDto> optional = stockRepository.findByStockSymbol(symbol);
 
         if (optional.isPresent()) {
             return optional.get();
         }
 
-        Stock stock = loadDataFromThirdParty(symbol);
+        StockDto stock = loadDataFromThirdParty(symbol);
         stockRepository.saveStock(stock);
         return stock;
     }
 
-    private Stock loadDataFromThirdParty(String symbol) throws IOException, ParseException {
-        Stock stock = sourceAPI.provideStockInformation(symbol);
+    private StockDto loadDataFromThirdParty(String symbol) throws IOException, ParseException {
+        StockDto stock = sourceAPI.provideStockInformation(symbol);
         return sourceAPI.provideStockInformation(symbol);
     }
 

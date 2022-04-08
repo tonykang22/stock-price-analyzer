@@ -1,4 +1,4 @@
-package hello.stockpriceanalyzer;
+package hello.stockpriceanalyzer.controller;
 
 import org.json.simple.parser.ParseException;
 import org.springframework.web.servlet.ModelAndView;

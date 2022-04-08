@@ -1,5 +1,8 @@
-package hello.stockpriceanalyzer;
+package hello.stockpriceanalyzer.controller;
 
+import hello.stockpriceanalyzer.dto.MaxProfitDto;
+import hello.stockpriceanalyzer.service.StockService;
+import hello.stockpriceanalyzer.service.StockServiceImpl;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +19,7 @@ public class StockControllerImpl implements StockController {
     @GetMapping("/stocks/profit/{symbol}")
     @Override
     public ModelAndView process(@PathVariable String symbol) throws IOException, ParseException {
-        MaxProfit profitInfo = stockService.calculateProfit(symbol);
+        MaxProfitDto profitInfo = stockService.calculateProfit(symbol);
         return new ModelAndView("response/profit")
                 .addObject(profitInfo);
     }
