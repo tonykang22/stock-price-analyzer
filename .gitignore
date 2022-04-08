@@ -1,6 +1,7 @@
 # gradle template
 .gradle
 build/
+
 !gradle/wrapper/gradle-wrapper.jar
 
 # ignore all .class files
@@ -15,3 +16,6 @@ build/
 *.iml
 *.ipr
 /out
+
+# ignore dev-environment properties
+application-dev.properties
