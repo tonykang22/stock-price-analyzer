@@ -1,8 +1,10 @@
 package hello.stockpriceanalyzer;
 
+import java.util.Optional;
+
 public interface StockRepository {
 
     void saveStock(Stock stock);
 
-    Stock findByStockSymbol(String symbol);
+    Optional<Stock> findByStockSymbol(String symbol);
 }

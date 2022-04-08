@@ -1,6 +1,7 @@
 package hello.stockpriceanalyzer;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class MemoryStockRepository implements StockRepository {
 
@@ -12,7 +13,8 @@ public class MemoryStockRepository implements StockRepository {
     }
 
     @Override
-    public Stock findByStockSymbol(String symbol) {
-        return store.get(symbol);
+    public Optional<Stock> findByStockSymbol(String symbol) {
+        return Optional.ofNullable(store.get(symbol));
     }
+
 }
