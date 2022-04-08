@@ -4,6 +4,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,53 +18,61 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StockAPI implements StockSourceAPI {
+public class YahooFinance implements StockSourceAPI {
 
-    private final Map<Long, Double> stockInfo;
-    private final String stockSymbol;
+    @Value("${yahoo.api.url.prefix}")
+    private String urlPrefix;
+    @Value("${yahoo.api.key}")
+    private String apiKey;
 
-    public StockAPI(String stockSymbol) {
-        this.stockSymbol = stockSymbol;
-        this.stockInfo = new HashMap<>();
-    }
+    public YahooFinance() {}
 
     @Override
-    public Map<Long, Double> provideStockInformation() throws IOException, ParseException {
-        HttpURLConnection connection = getHttpURLConnection(createUrl());
+    public Stock provideStockInformation(String stockSymbol) throws IOException, ParseException {
+        Map<Long, Double> stockInfo = new HashMap<>();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-        String result = br.readLine();
+        HttpURLConnection connection = getHttpURLConnection(createUrl(stockSymbol));
 
-        JSONObject wholeJsonObject = parseJson(result);
-        loadInfoToMap(wholeJsonObject);
+        String stockData = loadStringData(connection);
 
-        return this.stockInfo;
+        JSONObject wholeJsonObject = parseJson(stockSymbol, stockData);
+
+        return new Stock(stockSymbol, loadInfoToMap(wholeJsonObject));
     }
 
-    private URL createUrl() throws MalformedURLException {
-        String ulrStr = "https://yfapi.net/v8/finance/spark?interval=1d&range=6mo&symbols=" + this.stockSymbol;
+    private URL createUrl(String stockSymbol) throws MalformedURLException {
+        String ulrStr = urlPrefix + stockSymbol;
         return new URL(ulrStr);
     }
 
     private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("x-api-key", "irh3LNcQYs7i1GkOvXSSZ82aS4dk36ga6Nb2EMVw");
+        connection.setRequestProperty("x-api-key", apiKey);
         connection.setRequestMethod("GET");
         return connection;
     }
 
-    private JSONObject parseJson(String result) throws ParseException {
-        JSONParser jsonParser = new JSONParser();
-        JSONObject obj = (JSONObject) jsonParser.parse(result);
-        return (JSONObject) obj.get(this.stockSymbol);
+    private String loadStringData(HttpURLConnection connection) throws IOException {
+        InputStreamReader streamReader = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(streamReader);
+        return br.readLine();
     }
 
-    private void loadInfoToMap(JSONObject jsonObject) throws ParseException {
+    private JSONObject parseJson(String stockSymbol, String stringData) throws ParseException {
+        JSONParser jsonParser = new JSONParser();
+        JSONObject obj = (JSONObject) jsonParser.parse(stringData);
+        return (JSONObject) obj.get(stockSymbol);
+    }
+
+    private Map<Long, Double> loadInfoToMap(JSONObject jsonObject) throws ParseException {
+        Map<Long, Double> stockInfo = new HashMap<>();
+
         JSONArray timestamp = (JSONArray) jsonObject.get("timestamp");
         JSONArray price = (JSONArray) jsonObject.get("close");
         for (int i = 0; i < timestamp.size(); ++i) {
-            this.stockInfo.put((Long) timestamp.get(i), (Double) price.get(i));
+            stockInfo.put((Long) timestamp.get(i), (Double) price.get(i));
         }
+        return stockInfo;
     }
 
 }
