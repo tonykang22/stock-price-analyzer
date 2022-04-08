@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class YahooFinance implements StockSourceAPI {
@@ -27,7 +27,7 @@ public class YahooFinance implements StockSourceAPI {
 
     @Override
     public Stock provideStockInformation(String stockSymbol) throws IOException, ParseException {
-        Map<Long, Double> stockInfo = new HashMap<>();
+        Map<Long, Double> stockInfo = new LinkedHashMap<>();
 
         HttpURLConnection connection = getHttpURLConnection(createUrl(stockSymbol));
 
@@ -63,7 +63,7 @@ public class YahooFinance implements StockSourceAPI {
     }
 
     private Map<Long, Double> loadInfoToMap(JSONObject jsonObject) throws ParseException {
-        Map<Long, Double> stockInfo = new HashMap<>();
+        Map<Long, Double> stockInfo = new LinkedHashMap<>();
 
         JSONArray timestamp = (JSONArray) jsonObject.get("timestamp");
         JSONArray price = (JSONArray) jsonObject.get("close");
