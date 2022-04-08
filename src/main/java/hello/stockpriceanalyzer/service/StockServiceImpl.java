@@ -7,21 +7,33 @@ import hello.stockpriceanalyzer.repository.StockRepository;
 import hello.stockpriceanalyzer.service.thirdparty.StockSourceAPI;
 import hello.stockpriceanalyzer.service.thirdparty.YahooFinance;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Service
 public class StockServiceImpl implements StockService {
 
-    private StockRepository stockRepository = new MemoryStockRepository();
-    private StockSourceAPI sourceAPI = new YahooFinance();
+    private final StockRepository stockRepository = new MemoryStockRepository();
+    private final StockSourceAPI sourceAPI = new YahooFinance();
+
+    public StockDto findByStockSymbol(String symbol) throws IOException, ParseException {
+        Optional<StockDto> optional = stockRepository.findByStockSymbol(symbol);
+
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+
+        StockDto stock = loadDataFromThirdParty(symbol);
+        stockRepository.saveStock(stock);
+        return stock;
+    }
 
     @Override
-    public MaxProfitDto calculateProfit(String symbol) throws IOException, ParseException {
-        StockDto findStock = findByStockSymbol(symbol);
-        Map<Long, Double> stockInfo = findStock.getStockInfo();
-
+    public MaxProfitDto calculateProfit(StockDto stock) throws IOException, ParseException {
+        Map<Long, Double> stockInfo = stock.getStockInfo();
         List<Long> dates = new ArrayList<>(stockInfo.keySet());
         List<Double> prices = new ArrayList<>(stockInfo.values());
 
@@ -65,18 +77,6 @@ public class StockServiceImpl implements StockService {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
         date.setTime(timestamp * 1000L);
         return sdf.format(date);
-    }
-
-    private StockDto findByStockSymbol(String symbol) throws IOException, ParseException {
-        Optional<StockDto> optional = stockRepository.findByStockSymbol(symbol);
-
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-
-        StockDto stock = loadDataFromThirdParty(symbol);
-        stockRepository.saveStock(stock);
-        return stock;
     }
 
     private StockDto loadDataFromThirdParty(String symbol) throws IOException, ParseException {

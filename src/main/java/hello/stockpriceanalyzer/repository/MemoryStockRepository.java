@@ -1,11 +1,13 @@
 package hello.stockpriceanalyzer.repository;
 
 import hello.stockpriceanalyzer.dto.StockDto;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 public class MemoryStockRepository implements StockRepository {
 
     private final Map<String, StockDto> store;
