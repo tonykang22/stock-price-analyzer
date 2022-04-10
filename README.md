@@ -33,7 +33,8 @@
 <br>
 
 ## 🏗 Project Architecture
-![](../../../Downloads/Drawio/Projects/StockArchi.drawio.png)
+![StockArchi drawio](https://user-images.githubusercontent.com/86760744/162616579-2a24016b-1a14-443a-82ab-e47da9915cab.png)
+
 <br>
 
 ### Details
@@ -65,7 +66,7 @@
 
 ### Test
 
-![](../../../Downloads/test.png)
+![test](https://user-images.githubusercontent.com/86760744/162616563-75d89862-708b-44c3-93e9-ec3f80ae4f42.png)
 - The tests were thoroughly done since tests are that important.
 - Since every method and line were tested, now I know that the codes in the project works in the way that I intended.
 
@@ -73,7 +74,7 @@
 
 ### Environment
 
-![](../../../Downloads/2.png)
+![2](https://user-images.githubusercontent.com/86760744/162616569-2edf65a2-77df-4495-b39b-5f42a16f3330.png)
 - In the project, there are some critical information which shouldn't be revealed. (third-party API-key...ect)
 - For this project, just used the dev-environment properties file for such information.
 - But when I have to release this project in other server such as AWS, then I might need to consider using encryption library such as **Jasypt**.
