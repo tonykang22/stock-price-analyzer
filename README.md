@@ -13,8 +13,9 @@
 <br>
 
 ### Purpose of such project
-- To practice wisely choosing adaquate open API for the requirements.
-- ...
+- To practice wisely choosing adequate open API for the requirements.
+    * [Issue1 - Choosing the right Open API](https://github.com/tonykang22/stock-price-analyzer/issues/1)
+- Keep in mind that tests are indispensable.
 
 <br>
 
@@ -32,22 +33,47 @@
 <br>
 
 ## 🏗 Project Architecture
-
+![](../../../Downloads/Drawio/Projects/StockArchi.drawio.png)
 <br>
+
+### Details
+- Since the third-party source should be changed for some reasons(due to the price plan, or source API itself being deprecated.), used the interface to easily change the source.
+- Once you search for the stock profit, the data won't change due to its character. By having a repository will save lots of time and resources. 
+    * StockRepository is an interface since at the time the type of repository was not decided.
+    * Whenever the decision is made, just implement the interface, and it's good to go. (E.g. MySQL, Redis) 
 
 ## 💡 Feature List
-- [ ] Create an object which contains the data provided from the third-party data source.
-- [ ] Calculate the maximum profit with the object just created.
-- [ ] Return the calculated value to the client.
+- [X] Create an object which contains the data provided from the third-party data source.
+- [X] Calculate the maximum profit with the object just created.
+    * [X] For the algorithm, the greedy algorithm was implied with the O(N) Big-O notation.
+- [X] Return the calculated value to the client.
 
 <br>
 
-### Which messages should be delivered (Temporary)
-- Request for the data.
-- Calculate the maximum profit within the data.
-- Also, give the detail which day was the purchase and sell.
-- Show the results(profit and date).
+## 📡 Technologies Used
+- SpringBoot 2.6.6
+- Gradle 7.4.1
+- Java 11
+- Lombok
+- JUnit 5
 
 <br>
 
 ## ⌛️ Retrospect
+
+<br>
+
+### Test
+
+![](../../../Downloads/test.png)
+- The tests were thoroughly done since tests are that important.
+- Since every method and line were tested, now I know that the codes in the project works in the way that I intended.
+
+<br>
+
+### Environment
+
+![](../../../Downloads/2.png)
+- In the project, there are some critical information which shouldn't be revealed. (third-party API-key...ect)
+- For this project, just used the dev-environment properties file for such information.
+- But when I have to release this project in other server such as AWS, then I might need to consider using encryption library such as **Jasypt**.

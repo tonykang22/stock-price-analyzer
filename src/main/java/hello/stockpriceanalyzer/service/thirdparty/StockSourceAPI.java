@@ -1,11 +1,11 @@
 package hello.stockpriceanalyzer.service.thirdparty;
 
-import hello.stockpriceanalyzer.dto.StockDto;
+import hello.stockpriceanalyzer.domain.Stock;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 
 public interface StockSourceAPI {
 
-    StockDto provideStockInformation(String stockSymbol) throws IOException, ParseException;
+    Stock provideStockInformation(String stockSymbol) throws IOException, ParseException;
 }

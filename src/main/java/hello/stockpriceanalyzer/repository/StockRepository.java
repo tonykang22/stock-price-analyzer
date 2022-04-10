@@ -1,12 +1,12 @@
 package hello.stockpriceanalyzer.repository;
 
-import hello.stockpriceanalyzer.dto.StockDto;
+import hello.stockpriceanalyzer.domain.Stock;
 
 import java.util.Optional;
 
 public interface StockRepository {
 
-    void saveStock(StockDto stock);
+    Stock saveStock(Stock stock);
 
-    Optional<StockDto> findByStockSymbol(String symbol);
+    Optional<Stock> findByStockSymbol(String symbol);
 }

@@ -1,6 +1,6 @@
 package hello.stockpriceanalyzer.service.thirdparty;
 
-import hello.stockpriceanalyzer.dto.StockDto;
+import hello.stockpriceanalyzer.domain.Stock;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,14 +29,14 @@ public class YahooFinance implements StockSourceAPI {
     }
 
     @Override
-    public StockDto provideStockInformation(String stockSymbol) throws IOException, ParseException {
+    public Stock provideStockInformation(String stockSymbol) throws IOException, ParseException {
         HttpURLConnection connection = getHttpURLConnection(createUrl(stockSymbol));
 
         String stockData = loadStringData(connection);
 
         JSONObject wholeJsonObject = parseJson(stockSymbol, stockData);
 
-        return new StockDto(stockSymbol, loadInfoToMap(wholeJsonObject));
+        return new Stock(stockSymbol, loadInfoToMap(wholeJsonObject));
     }
 
     private URL createUrl(String stockSymbol) throws MalformedURLException {

@@ -1,6 +1,6 @@
 package hello.stockpriceanalyzer.repository;
 
-import hello.stockpriceanalyzer.dto.StockDto;
+import hello.stockpriceanalyzer.domain.Stock;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -10,19 +10,20 @@ import java.util.Optional;
 @Repository
 public class MemoryStockRepository implements StockRepository {
 
-    private final Map<String, StockDto> store;
+    private final Map<String, Stock> store;
 
     public MemoryStockRepository() {
         store = new HashMap<>();
     }
 
     @Override
-    public void saveStock(StockDto stock) {
+    public Stock saveStock(Stock stock) {
         store.put(stock.getStockSymbol(), stock);
+        return stock;
     }
 
     @Override
-    public Optional<StockDto> findByStockSymbol(String symbol) {
+    public Optional<Stock> findByStockSymbol(String symbol) {
         return Optional.ofNullable(store.get(symbol));
     }
 

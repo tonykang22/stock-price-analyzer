@@ -17,10 +17,10 @@
         </thead>
         <tbody>
         <tr th:object="${maxProfit}"></tr>
-            <td th:text="${maxProfit.getPurchaseDate()}">Purchase date</td>
-            <td th:text="${maxProfit.getSellDate()}">Sell date</td>
-            <td th:text="${maxProfit.getProfit()}">Price variance</td>
-            <td th:text="${maxProfit.getPercentage()}">Profit (percentage)</td>
+        <td th:text="${maxProfit.getPercentage()}">Profit (percentage)</td>
+        <td th:text="${maxProfit.getProfit()}">Price variance</td>
+        <td th:text="${maxProfit.getPurchaseDate()}">Purchase date</td>
+        <td th:text="${maxProfit.getSellDate()}">Sell date</td>
         </tr>
         </tbody>
     </table>
