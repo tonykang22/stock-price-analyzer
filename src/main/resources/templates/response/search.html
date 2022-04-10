@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Look for Most Profit</title>
+</head>
+<body>
+<form method="get" value="@PathVariable" action=/stocks/profit>
+    <p>
+        <label>Input Symbol :
+        <input type="text" name="symbol">
+    </label>
+    </p>
+    <p><button th:onclick="|location.href='@{/stocks/profit/{symbol}'|">검색</button></p>
+</form>
+</body>
+</html>
